@@ -1,5 +1,3 @@
-# Tung-Che Chang
-
 ## About me
 My name is Tung-Che Chang and I'm a PhD student in Computer Science at Rutgers University.
 My research interest is programming languages and formal verification. More specifically I'm working on the formalization of the P3109 floating-point standard in Lean.
