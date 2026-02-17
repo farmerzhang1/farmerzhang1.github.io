@@ -1,4 +1,4 @@
-# FARMERZHANG1'S BLOG
+# Tung-Che Chang
 
 ## About me
 My name is Tung-Che Chang and I'm a PhD student in Computer Science at Rutgers University.
