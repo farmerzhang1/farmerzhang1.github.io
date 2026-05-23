@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OCaml Software Setup — CS 314, Rutgers University</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --red:      #CC0033; /* Rutgers scarlet */
+      --red-dark: #9E0027;
+      --red-dim:  #fdf0f3;
+      --navy:     #1a1f2e;
+      --ink:      #1e2227;
+      --muted:    #5a6270;
+      --border:   #dde1e8;
+      --bg:       #f8f9fb;
+      --white:    #ffffff;
+      --code-bg:  #1e2227;
+      --code-fg:  #e8ecf1;
+      --mono:     'IBM Plex Mono', monospace;
+      --sans:     'IBM Plex Sans', sans-serif;
+      --radius:   6px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--ink);
+      background: var(--bg);
+    }
+
+    /* ── Header ─────────────────────────────────────────────── */
+    header {
+      background: var(--navy);
+      color: var(--white);
+      padding: 2.5rem 2rem 2rem;
+      border-bottom: 4px solid var(--red);
+    }
+    .header-inner { max-width: 860px; margin: 0 auto; }
+    .header-tag {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: .6rem;
+    }
+    header h1 {
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
+      font-weight: 600;
+      line-height: 1.2;
+      margin-bottom: .5rem;
+    }
+    header p {
+      color: #9aa3b2;
+      font-size: .95rem;
+    }
+    header a { color: #9aa3b2; }
+
+    /* ── Layout ─────────────────────────────────────────────── */
+    .page { max-width: 860px; margin: 0 auto; padding: 2.5rem 2rem 4rem; }
+
+    /* ── ToC ────────────────────────────────────────────────── */
+    .toc {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--red);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .toc-title {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: .75rem;
+    }
+    .toc ol { padding-left: 1.2rem; }
+    .toc li { margin: .3rem 0; font-size: .92rem; }
+    .toc a { color: var(--red-dark); text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+
+    /* ── Sections ───────────────────────────────────────────── */
+    section { margin-bottom: 3rem; }
+    section + section { border-top: 1px solid var(--border); padding-top: 2.5rem; }
+
+    h2 {
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+    }
+    h2 .step-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px; height: 28px;
+      background: var(--red);
+      color: white;
+      border-radius: 50%;
+      font-size: .8rem;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin: 1.4rem 0 .5rem;
+    }
+
+    p { margin-bottom: .9rem; }
+    p:last-child { margin-bottom: 0; }
+
+    a { color: var(--red-dark); }
+    a:hover { color: var(--red); }
+
+    ul, ol {
+      padding-left: 1.4rem;
+      margin-bottom: .9rem;
+    }
+    li { margin: .35rem 0; }
+    li ul, li ol { margin-top: .35rem; margin-bottom: 0; }
+
+    /* ── Code ───────────────────────────────────────────────── */
+    code {
+      font-family: var(--mono);
+      font-size: .85em;
+      background: #eef0f4;
+      padding: .15em .4em;
+      border-radius: 3px;
+      color: var(--red-dark);
+    }
+
+    pre {
+      background: var(--code-bg);
+      color: var(--code-fg);
+      font-family: var(--mono);
+      font-size: .85rem;
+      line-height: 1.6;
+      padding: 1.1rem 1.3rem;
+      border-radius: var(--radius);
+      overflow-x: auto;
+      margin: .75rem 0 1rem;
+      position: relative;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+      font-size: inherit;
+    }
+
+    /* copy button */
+    .pre-wrap { position: relative; }
+    .copy-btn {
+      position: absolute;
+      top: .5rem; right: .5rem;
+      background: #2e3545;
+      color: #9aa3b2;
+      border: none;
+      border-radius: 4px;
+      padding: .2rem .55rem;
+      font-family: var(--mono);
+      font-size: .72rem;
+      cursor: pointer;
+      transition: background .15s, color .15s;
+    }
+    .copy-btn:hover { background: var(--red); color: white; }
+
+    /* ── Callout boxes ──────────────────────────────────────── */
+    .callout {
+      display: flex;
+      gap: .85rem;
+      padding: 1rem 1.1rem;
+      border-radius: var(--radius);
+      margin: 1rem 0;
+      font-size: .93rem;
+    }
+    .callout-icon { font-size: 1.1rem; flex-shrink: 0; line-height: 1.7; }
+    .callout.note  { background: #eef4ff; border-left: 3px solid #4a80d4; }
+    .callout.warn  { background: #fff8ec; border-left: 3px solid #e0982a; }
+    .callout.ilab  { background: var(--red-dim); border-left: 3px solid var(--red); }
+
+    /* ── Platform tabs ──────────────────────────────────────── */
+    .tabs { display: flex; gap: 4px; margin: 1rem 0 0; flex-wrap: wrap; }
+    .tab-btn {
+      padding: .38rem .9rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius) var(--radius) 0 0;
+      background: var(--bg);
+      cursor: pointer;
+      font-family: var(--sans);
+      font-size: .88rem;
+      color: var(--muted);
+      border-bottom: none;
+      transition: background .1s, color .1s;
+    }
+    .tab-btn.active {
+      background: var(--white);
+      color: var(--ink);
+      font-weight: 600;
+      border-color: var(--border);
+    }
+    .tab-panel {
+      display: none;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 0 var(--radius) var(--radius) var(--radius);
+      padding: 1.2rem 1.3rem;
+    }
+    .tab-panel.active { display: block; }
+
+    /* ── Optional section ───────────────────────────────────── */
+    .optional-label {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: .72rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      background: #e8f0fe;
+      color: #4a80d4;
+      padding: .15em .5em;
+      border-radius: 3px;
+      vertical-align: middle;
+      margin-left: .4rem;
+    }
+
+    /* ── Footer ─────────────────────────────────────────────── */
+    footer {
+      background: var(--navy);
+      color: #6b7585;
+      text-align: center;
+      padding: 1.5rem;
+      font-size: .83rem;
+      font-family: var(--mono);
+    }
+    footer a { color: #9aa3b2; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <p class="header-tag">CS 314 · Rutgers University · Summer 2026</p>
+    <h1>OCaml Software Setup</h1>
+    <p>Installing OCaml, opam, utop, and VS Code &mdash; <a href="https://resources.cs.rutgers.edu">iLab documentation</a></p>
+  </div>
+</header>
+
+<main class="page">
+
+  <!-- ToC -->
+  <nav class="toc" aria-label="Page contents">
+    <p class="toc-title">On this page</p>
+    <ol>
+      <li><a href="#install-opam">Install opam</a></li>
+      <li><a href="#install-tools">Install dune, utop, and ocaml-lsp-server</a></li>
+      <li><a href="#ilab">Using Rutgers iLab (remote option)</a></li>
+      <li><a href="#configure-utop">Configure utop <span class="optional-label">optional</span></a></li>
+      <li><a href="#vscode">Install VS Code and the OCaml extension</a></li>
+    </ol>
+  </nav>
+
+  <p>
+    We will use <a href="https://opam.ocaml.org/" target="_blank">opam</a>, OCaml's package manager,
+    to install OCaml as well as various libraries and tools. We recommend (but do not require) the
+    <a href="https://code.visualstudio.com/" target="_blank">Visual Studio Code</a> editor.
+  </p>
+  <p>
+    The <a href="https://ocaml.org/learn/tutorials/up_and_running.html" target="_blank">Up and Running with OCaml</a>
+    guide on ocaml.org provides a general walkthrough, but read the platform-specific instructions below first &mdash;
+    they reflect what has actually worked for CS 314 students.
+    If you run into trouble, post on <strong>Piazza</strong> so we can improve these notes.
+  </p>
+
+  <!-- ── Step 1 ── -->
+  <section id="install-opam">
+    <h2><span class="step-badge">1</span> Install opam</h2>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab(this,'windows-wsl')">Windows (WSL)</button>
+      <button class="tab-btn"        onclick="switchTab(this,'windows-alt')">Windows (alt)</button>
+      <button class="tab-btn"        onclick="switchTab(this,'linux-mac')">Linux / macOS / WSL</button>
+    </div>
+
+    <div id="windows-wsl" class="tab-panel active">
+      <p>
+        The recommended path on Windows is
+        <a href="https://docs.microsoft.com/en-us/windows/wsl/install" target="_blank">Windows Subsystem for Linux (WSL)</a>.
+        WSL lets you run a full GNU/Linux environment directly on Windows without a VM.
+        Install WSL 2 if possible.
+      </p>
+      <p>After WSL is set up, install the C build tools:</p>
+      <div class="pre-wrap">
+        <button class="copy-btn" onclick="copyCode(this)">copy</button>
+        <pre><code>sudo apt install build-essential</code></pre>
+      </div>
+      <p>Then follow the <strong>Linux / macOS / WSL</strong> tab instructions below.</p>
+    </div>
+
+    <div id="windows-alt" class="tab-panel">
+      <p>
+        If you prefer not to use WSL, follow the
+        <a href="https://fdopen.github.io/opam-repository-mingw/installation/" target="_blank">opam for Windows (Cygwin) installation instructions</a>.
+        The 64-bit graphical installer is recommended. If you get a virus-scan failure on download, try &ldquo;Save link as&rdquo;
+        from an incognito browser window.
+      </p>
+      <p>
+        After installation completes (it takes a while), open the Cygwin terminal created in the previous step and proceed to Step 2.
+      </p>
+      <div class="callout warn">
+        <span class="callout-icon">⚠️</span>
+        <span>
+          If you already had Cygwin installed, you now have two. You must use the new one (created here) for all OCaml work.
+          See the VS Code section below for a critical note about launching VS Code from Cygwin.
+        </span>
+      </div>
+    </div>
+
+    <div id="linux-mac" class="tab-panel">
+      <p>
+        Follow the instructions on
+        <a href="https://opam.ocaml.org/doc/Install.html" target="_blank">opam&rsquo;s official installation page</a>,
+        keeping the notes below in mind.
+      </p>
+
+      <h3>macOS</h3>
+      <p>You need Xcode command-line tools. If not already installed:</p>
+      <div class="pre-wrap">
+        <button class="copy-btn" onclick="copyCode(this)">copy</button>
+        <pre><code>xcode-select --install</code></pre>
+      </div>
+
+      <h3>WSL</h3>
+      <p>Make sure <code>unzip</code> is installed, and disable sandboxing:</p>
+      <div class="pre-wrap">
+        <button class="copy-btn" onclick="copyCode(this)">copy</button>
+        <pre><code>sudo apt-get install unzip
+opam init --disable-sandboxing --reinit</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Step 2 ── -->
+  <section id="install-tools">
+    <h2><span class="step-badge">2</span> Install dune, utop, and ocaml-lsp-server</h2>
+
+    <p>Once opam is installed, run:</p>
+    <div class="pre-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">copy</button>
+      <pre><code>opam install dune utop</code></pre>
+    </div>
+
+    <div class="callout warn">
+      <span class="callout-icon">⚠️</span>
+      <div>
+        <p style="margin-bottom:.4rem">If you see:</p>
+        <code>[ERROR] No switch is currently set. Please use 'opam switch' to set or install a switch</code>
+        <p style="margin-top:.6rem">Run this first, then retry:</p>
+        <div class="pre-wrap">
+          <button class="copy-btn" onclick="copyCode(this)">copy</button>
+          <pre><code>opam switch create ocaml-base-compiler.4.13.1
+opam install dune utop</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <p>If you are using VS Code, also install the language server:</p>
+    <div class="pre-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">copy</button>
+      <pre><code>opam install ocaml-lsp-server</code></pre>
+    </div>
+
+    <p>
+      You can learn more from the <a href="https://opam.ocaml.org/doc/Usage.html" target="_blank">opam usage guide</a>,
+      but it&rsquo;s not required reading for CS 314.
+    </p>
+  </section>
+
+  <!-- ── Step 3: iLab ── -->
+  <section id="ilab">
+    <h2><span class="step-badge">3</span> Using Rutgers iLab (remote option)</h2>
+
+    <div class="callout ilab">
+      <span class="callout-icon">🎓</span>
+      <span>
+        If you&rsquo;d rather not install OCaml locally, you can use the
+        <strong>Rutgers CS iLab machines</strong> &mdash; Linux workstations maintained by the CS department
+        with OCaml already available.
+      </span>
+    </div>
+
+    <p>SSH into iLab using your Rutgers NetID:</p>
+    <div class="pre-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">copy</button>
+      <pre><code>ssh &lt;NetID&gt;@ilab.cs.rutgers.edu</code></pre>
+    </div>
+
+    <p>
+      Use your CS department password (not your general Rutgers password).
+      See <a href="https://report.cs.rutgers.edu/nagiosnotes/iLab-machines.html" target="_blank">iLab machine status</a>
+      for available machines and their current load.
+    </p>
+
+    <div class="callout note">
+      <span class="callout-icon">ℹ️</span>
+      <span>
+        The version of OCaml installed system-wide on iLab may lag behind the latest release.
+        If you run into version-specific issues on an assignment, post on Piazza and we&rsquo;ll advise.
+        You can also install a personal opam environment inside your iLab home directory using the
+        Linux instructions in Step 1.
+      </span>
+    </div>
+
+    <h3>VS Code with iLab via SSH</h3>
+    <p>
+      Install the
+      <a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh" target="_blank">Remote-SSH extension</a>
+      for VS Code. This lets you edit files on iLab and use the integrated terminal, all from your local VS Code window.
+    </p>
+  </section>
+
+  <!-- ── Step 4 ── -->
+  <section id="configure-utop">
+    <h2><span class="step-badge" style="background:#4a80d4">4</span> Configure utop <span class="optional-label">optional</span></h2>
+
+    <p>Two optional tweaks that make utop nicer for class use:</p>
+
+    <h3>Reduce visual clutter</h3>
+    <p>
+      By default utop shows a lot of UI chrome. To remove it, create
+      <code>~/.config/utop/init.ml</code> with these two lines:
+    </p>
+    <div class="pre-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">copy</button>
+      <pre><code>#utop_prompt_dummy;;
+UTop.set_show_box false</code></pre>
+    </div>
+
+    <div class="pre-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">copy</button>
+      <pre><code>mkdir -p ~/.config/utop
+# then create ~/.config/utop/init.ml with the two lines above</code></pre>
+    </div>
+
+    <h3>Syntax highlighting (light mode)</h3>
+    <p>Create <code>~/.utoprc</code> with the following content to match the colors used in lecture:</p>
+    <div class="pre-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">copy</button>
+      <pre><code>profile: light
+
+identifier.foreground: none
+module.foreground: x-forestgreen
+comment.foreground: x-firebrick
+doc.foreground: x-violetred4
+constant.foreground: x-darkcyan
+keyword.foreground: x-purple
+symbol.foreground: x-purple
+string.foreground: x-violetred4
+char.foreground: x-violetred4
+quotation.foreground: x-purple
+error.foreground: red
+directive.foreground: x-mediumorchid4
+parenthesis.background: light-blue</code></pre>
+    </div>
+    <div class="callout note">
+      <span class="callout-icon">ℹ️</span>
+      <span>These colors are tuned for light mode. They will not look great in dark mode.</span>
+    </div>
+  </section>
+
+  <!-- ── Step 5 ── -->
+  <section id="vscode">
+    <h2><span class="step-badge">5</span> Install VS Code and the OCaml extension</h2>
+
+    <h3>Install VS Code</h3>
+    <p>
+      Download the installer for your platform from the
+      <a href="https://code.visualstudio.com/#alt-downloads" target="_blank">VS Code downloads page</a>.
+    </p>
+    <div class="callout note">
+      <span class="callout-icon">ℹ️</span>
+      <span>
+        If you installed OCaml via WSL on Windows,
+        <a href="https://code.visualstudio.com/docs/remote/wsl" target="_blank">follow these instructions to develop in WSL using VS Code</a>.
+        This lets you edit WSL files in VS Code and use a WSL terminal with your OCaml installation.
+      </span>
+    </div>
+
+    <h3>Install the OCaml Platform extension</h3>
+    <p>
+      Install the
+      <a href="https://marketplace.visualstudio.com/items?itemName=ocamllabs.ocaml-platform" target="_blank">OCaml Platform extension by OCaml Labs</a>
+      from the VS Code marketplace. Click the green Install button.
+    </p>
+
+    <h3>Windows (Cygwin) — important</h3>
+    <p>
+      On Windows <em>without</em> WSL (i.e., using Cygwin), you <strong>must</strong> launch VS Code
+      from the Cygwin terminal, not by clicking its icon. Otherwise the language server won&rsquo;t be found:
+    </p>
+    <div class="pre-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">copy</button>
+      <pre><code>/cygdrive/c/Users/Your\ Name/AppData/Local/Programs/Microsoft\ VS\ Code/Code.exe</code></pre>
+    </div>
+    <p>To make this less painful, add an alias to your <code>~/.bash_profile</code> in Cygwin:</p>
+    <div class="pre-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">copy</button>
+      <pre><code>alias vscode="/cygdrive/c/Users/Your\ Name/AppData/Local/Programs/Microsoft\ VS\ Code/Code.exe"</code></pre>
+    </div>
+    <p>
+      Replace <code>Your\ Name</code> with your Windows account name.
+      After adding this, type <code>vscode</code> in a Cygwin terminal to launch VS Code.
+    </p>
+  </section>
+
+</main>
+
+<footer>
+  CS 314 &mdash; Programming Languages &mdash; Rutgers University &mdash; Summer 2026
+  &nbsp;&middot;&nbsp;
+  Based on <a href="https://sites.google.com/cs.washington.edu/cse341spring2023/resources/ocaml-software-setup" target="_blank">UW CSE 341 materials</a> by Dan Grossman
+</footer>
+
+<script>
+  function switchTab(btn, panelId) {
+    const container = btn.closest('section');
+    container.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    container.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(panelId).classList.add('active');
+  }
+
+  function copyCode(btn) {
+    const code = btn.nextElementSibling.textContent;
+    navigator.clipboard.writeText(code).then(() => {
+      btn.textContent = 'copied!';
+      setTimeout(() => btn.textContent = 'copy', 1800);
+    });
+  }
+</script>
+
+</body>
+</html>
